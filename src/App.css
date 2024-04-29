@@ -1,0 +1,21 @@
+.outer-div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.button-bar {
+  margin-bottom: 1rem;
+}
+
+.grid-wrapper {
+  flex: 1 1 auto;
+}
+.container-ag {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.ag-header-cell-label {
+  justify-content: center;
+}
