@@ -47,7 +47,7 @@ const AddCustomers = ({addCustomers}) => {
                 open={open}
                 onClose={handleClose}
             >
-                <DialogTitle>AddCustomer Details</DialogTitle>
+                <DialogTitle>Add Customer</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus

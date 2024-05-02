@@ -8,6 +8,8 @@ import Trainings from './pages/Trainings';
 import { BrowserRouter } from 'react-router-dom';
 
 function App() {
+  
+
   return (
     <Typography variant='h6' color={'inherit'} component={"div"}>
       <Routes>
