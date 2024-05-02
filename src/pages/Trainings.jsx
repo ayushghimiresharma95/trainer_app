@@ -4,9 +4,20 @@ import { AgGridReact } from 'ag-grid-react'
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 import dayjs from 'dayjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTrainer } from '../State/State';
+import { Button, Snackbar } from '@mui/material';
+import AddTraining from '../components/AddTraining/AddTraining';
 const Trainings = () => {
-  const [training, setTrainings] = useState([])
+ 
+  const dispatch = useDispatch()
+  const training = useSelector((state) => state.trainings)
+  const [openSnackbar,setOpenSnackbar] = useState(false)
+  const [openSnackMessage,setOpenSnackMessage] = useState("")
 
+
+  
+  /* Getting the data from the API */
   const fetchData = async () => {
     try {
       const trainingTime = await fetch("https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings");
@@ -28,15 +39,69 @@ const Trainings = () => {
         time: dayjs(training.time).format("HH:MM"),
         customer: customerNames[index],
         duration: training.duration,
-        activity: training.activity
+        activity: training.activity,
+        _links: training._links
       }));
   
-      // Set the formatted training data to the state
-      setTrainings(formattedTrainings);
+      // Set the formatted training data to the state 
+      dispatch(setTrainer({trainings: formattedTrainings}))
     } catch (error) {
+
       console.error("Error fetching data:", error);
     }
   };
+
+  const addTrainer = (newTraining) => {
+    const updatedTrainer = {
+      date: new Date(`${newTraining.date}T${newTraining.time}`).toISOString(),
+      duration: newTraining.duration,
+      customer: newTraining.customer,
+      activity: newTraining.activity
+  }
+  fetch("https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings",
+
+      {
+          method: "post",
+          body: JSON.stringify(updatedTrainer),
+          headers: { 'Content-Type': 'application/json' }
+      }).then(response => {
+          
+          setOpenSnackMessage("Successfully added the trainer ")
+          setOpenSnackbar(true)
+          fetchData()
+      }).catch(err => {
+        
+        setOpenSnackMessage("Error: " + err.message)
+        setOpenSnackbar(true)
+      })
+  }
+
+  /* opening the data for the snackbar */
+  const handleCloseSnackbar = () => {
+    openSnackbar(false) ;
+  }
+  const deleteTraining = (params) => {
+    console.log(params)
+   if(window.confirm("Are you sure ?")){
+    fetch(params,{method: "delete", headers: { 'Content-Type': 'application/json' }}).then((response) => {
+      console.log(response)
+      if (response.ok){
+        setOpenSnackbar(true)
+        setOpenSnackMessage("Successfully deleted the training schedule.");
+        fetchData()
+      }else{
+        setOpenSnackbar(true)
+        setOpenSnackMessage("Failed to deleted the training schedule.");
+        console.log("Failed to delete the training schedule")
+      }
+    }).catch(error => {
+      console.error("Failed to get the server",error)
+    })
+   }
+  }
+  
+
+
 
   const defaultColDef = useMemo(() => {
     return {
@@ -51,7 +116,12 @@ const Trainings = () => {
     { field: "duration", filter: true, cellStyle: { textAlign: 'center' }, width: 250 },
     { field: "activity", filter: true, cellStyle: { textAlign: 'center' }, width: 250 },
     { field: "customer", filter: true, cellStyle: { textAlign: 'center' }, width: 250 },
-
+    {
+      headerName: "Delete",
+      cellRenderer: (params) => <Button variant='outlined' color="error" size='small' onClick={() => deleteTraining(params.data._links.training.href)}  >Delete</Button>,
+      width: 200,
+      cellStyle: { textAlign: 'center' }
+    }
   ]
 
 
@@ -62,7 +132,9 @@ const Trainings = () => {
   return (
     <div className='container-ag' style={{ width: "100%", height: "100%" }}>
       <Navbar />
+      
       <div className={"ag-theme-quartz-dark"} style={{ height: "100%", width: "100%", textAlign: "center" }}>
+      <AddTraining addTrainer={addTrainer}   />
         <AgGridReact
 
           rowData={training}
@@ -76,7 +148,11 @@ const Trainings = () => {
 
         />
 
-
+        <Snackbar
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          message={openSnackMessage}
+         />
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 
 import './App.css';
-import { Switch } from '@mui/material';
+import { Switch, Typography } from '@mui/material';
 import { Route, Routes } from 'react-router';
 import Customer from './pages/Customer';
 import Profile from './pages/Profile';
@@ -9,13 +9,13 @@ import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <>
+    <Typography variant='h6' color={'inherit'} component={"div"}>
       <Routes>
         <Route path='/customer' element={<Customer/>} />
         <Route path='/profile' element={ <Profile/>} />
         <Route path="/training" element={<Trainings/>} />
       </Routes>
-    </>
+    </Typography>
       
    
   );

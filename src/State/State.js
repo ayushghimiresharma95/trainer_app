@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    trainig: [],
-    customers: []
+    trainings: [],
+    customers: [],
+    editCustomer : null
 }
 
 export const trainerSlice = createSlice({
@@ -14,10 +15,13 @@ export const trainerSlice = createSlice({
               state.customers = actions.payload.customers
         },
         setTrainer : (state,actions) => {
-            state.trainer = actions.payload.trainer
+            state.trainings = actions.payload.trainings
+        },
+        SetEditCustomer: (state,actions) => {
+            state.customers = actions.payload.editCustomer
         }
 
     }
 })
-export const {setCustomers,setTrainer} = trainerSlice.actions ;
+export const {setCustomers,setTrainer,SetEditCustomer} = trainerSlice.actions ;
 export default trainerSlice.reducer ;
