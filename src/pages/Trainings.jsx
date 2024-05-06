@@ -5,7 +5,7 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTrainer } from '../State/State';
+import { setPath, setTrainer } from '../State/State';
 import { Button, Snackbar } from '@mui/material';
 import AddTraining from '../components/AddTraining/AddTraining';
 const Trainings = () => {
@@ -20,7 +20,7 @@ const Trainings = () => {
   /* Getting the data from the API */
   const fetchData = async () => {
     try {
-      const trainingTime = await fetch("https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings");
+      const trainingTime = await fetch(`${process.env.REACT_APP_URL}/trainings`);
       const data = await trainingTime.json();
   
       // Fetch customer data for each training and map it to a new array of promises
@@ -37,6 +37,7 @@ const Trainings = () => {
       const formattedTrainings = data._embedded.trainings.map((training, index) => ({
         date: dayjs(training.date).format("DD/MM/YYYY"),
         time: dayjs(training.time).format("HH:MM"),
+        dateAndTime: training.date,
         customer: customerNames[index],
         duration: training.duration,
         activity: training.activity,
@@ -58,7 +59,7 @@ const Trainings = () => {
       customer: newTraining.customer,
       activity: newTraining.activity
   }
-  fetch("https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings",
+  fetch(`${process.env.REACT_APP_URL}/trainings`,
 
       {
           method: "post",
@@ -127,11 +128,13 @@ const Trainings = () => {
 
   useEffect(() => {
     fetchData();
+    dispatch(setPath({path:"Trainer Schedule"}))
   }, [])
 
   return (
     <div className='container-ag' style={{ width: "100%", height: "100%" }}>
       <Navbar />
+      
       
       <div className={"ag-theme-quartz-dark"} style={{ height: "100%", width: "100%", textAlign: "center" }}>
       <AddTraining addTrainer={addTrainer}   />

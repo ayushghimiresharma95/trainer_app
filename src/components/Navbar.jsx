@@ -11,6 +11,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 240;
 const navItems = ['customer', 'training', 'profile'];
@@ -19,6 +20,8 @@ function Navbar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const navigate = useNavigate();
+  const path = useSelector(state => state.path)
+  
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -28,6 +31,7 @@ function Navbar(props) {
     navigate(`/${path}`);
     handleDrawerToggle();
   };
+  useEffect(() => {},[path])
 
   const drawer = (
     <Drawer
@@ -42,6 +46,9 @@ function Navbar(props) {
       }}
     >
       <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        {path}
+      </Typography>
         <List>
           {navItems.map((item) => (
             <ListItem key={item} button onClick={() => handleNavigation(item)}>
@@ -73,6 +80,7 @@ function Navbar(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
+          {path}
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }} >
             {navItems.map((item) => (

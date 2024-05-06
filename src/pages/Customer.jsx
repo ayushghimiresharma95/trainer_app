@@ -9,9 +9,12 @@ import { AppBar, Snackbar } from '@mui/material';
 import Navbar from '../components/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
-import { setCustomers } from '../State/State';
+import { setCustomers, setPath } from '../State/State';
 import EditCustomers from '../components/EditAndDelete/EditCustomers';
 import AddCustomers from '../components/EditAndDelete/AddCustomer';
+import { CSVLink } from 'react-csv';
+import { useNavigate } from 'react-router';
+
 
 
 const Customer = () => {
@@ -20,6 +23,10 @@ const Customer = () => {
   const dispatch = useDispatch()
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [filterCustomers, setFilterCustomers] = useState(null)
+  const navigate = useNavigate()
+ 
+
 
 
   const deleteCustomer = (params) => {
@@ -28,11 +35,11 @@ const Customer = () => {
         if (response.ok) {
           setSnackbarMessage("Successfully deleted the customer")
           fetchData()
-        }else {
+        } else {
           console.error('Failed to delete row:', response.statusText);
-      }
+        }
       })
-      .catch(error => console.error('Error deleting row:', error));
+        .catch(error => console.error('Error deleting row:', error));
     }
   }
 
@@ -63,10 +70,11 @@ const Customer = () => {
     });
   }
   const addcustomers = (customer) => {
-    fetch("https://customerrestservice-personaltraining.rahtiapp.fi/api/customers",{
+    fetch(`${process.env.REACT_APP_URL}/customers`, {
       method: "POST",
       body: JSON.stringify(customer),
-      headers: { 'Content-Type': 'application/json' }}).
+      headers: { 'Content-Type': 'application/json' }
+    }).
       then(response => {
         if (response.ok) {
           setSnackbarMessage("Car added successfully")
@@ -80,29 +88,66 @@ const Customer = () => {
       });
   }
   const addRow = (customers) => {
-     
+
   }
-  
 
 
-  const fetchData = async () => {
-    const response = await fetch("https://customerrestservice-personaltraining.rahtiapp.fi/api/customers", {
-      method: 'GET', headers: {
+
+  const fetchData = () => {
+    fetch(`${process.env.REACT_APP_URL}/customers`, {
+      method: 'GET',
+      headers: {
         "Content-Type": "application/json",
-
       }
     })
-    const data = await response.json()
-    dispatch(setCustomers({ customers: data._embedded.customers }))
-  }
+      .then(response => {
+        console.log(REACT_APP_URL)
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        const filteredCustomers = data._embedded.customers.map(customer => ({
+          firstname: customer.firstname,
+          lastname: customer.lastname,
+          city: customer.city,
+          streetaddress: customer.streetaddress,
+          email: customer.email,
+          postcode: customer.postcode,
+          phone: customer.phone,
+        }));
+
+        
+        setFilterCustomers(filteredCustomers);
+        dispatch(setCustomers({ customers: data._embedded.customers }));
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        // Handle error (e.g., show error message to the user)
+      });
+  };
+
+
+
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
+  const headers = [
+    { label: "firstname", key: "firstname" },
+    { label: "lastname", key: "lastname" },
+    { label: "city", key: "city" },
+    { label: "streetaddress", key: "streetaddress" },
+    { label: "email", key: "email" },
+    { label: "postcode", key: "postcode" },
+    { label: "phone", key: "phone" }
+  ];
   useEffect(() => {
     fetchData()
+    dispatch(setPath({path:"Customers"}))
 
   }, [])
-  
+
 
 
 
@@ -137,13 +182,12 @@ const Customer = () => {
     <div style={{ width: "100%", height: "100%" }}>
       <Navbar />
       <div className={"ag-theme-quartz-dark"} style={{ height: "100%", width: "100%", textAlign: "center" }}>
-
-
-
-      <AddCustomers addCustomers={addcustomers}  >Add Customer</AddCustomers>
-
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
+          <AddCustomers addCustomers={addcustomers}  >Add Customer</AddCustomers>
+          {filterCustomers && <CSVLink style={{border:"1px solid #00215E",color:"#00215E",padding:"10px",textDecoration:"none",borderRadius:"3px"}} data={filterCustomers} headers={headers} variant="outlined" color="primary" >Export to CSV</CSVLink>}
+          <Button variant="outlined" onClick={() => navigate("/calender")}>Show in calender</Button>
+        </div>
         <AgGridReact
-
           rowData={customers}
           columnDefs={columns}
 

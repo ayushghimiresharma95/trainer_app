@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     trainings: [],
     customers: [],
-    editCustomer : null
+    editCustomer : null,
+    path: ""
 }
 
 export const trainerSlice = createSlice({
@@ -19,9 +20,12 @@ export const trainerSlice = createSlice({
         },
         SetEditCustomer: (state,actions) => {
             state.customers = actions.payload.editCustomer
+        },
+        setPath: (state,actions) => {
+            state.path = actions.payload.path
         }
 
     }
 })
-export const {setCustomers,setTrainer,SetEditCustomer} = trainerSlice.actions ;
+export const {setCustomers,setTrainer,SetEditCustomer,setPath} = trainerSlice.actions ;
 export default trainerSlice.reducer ;

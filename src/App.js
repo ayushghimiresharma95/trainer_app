@@ -6,6 +6,7 @@ import Customer from './pages/Customer';
 import Profile from './pages/Profile';
 import Trainings from './pages/Trainings';
 import { BrowserRouter } from 'react-router-dom';
+import Calender from './components/Calender/Calender';
 
 function App() {
   
@@ -16,6 +17,7 @@ function App() {
         <Route path='/customer' element={<Customer/>} />
         <Route path='/profile' element={ <Profile/>} />
         <Route path="/training" element={<Trainings/>} />
+        <Route path='/calender' element={<Calender />} />
       </Routes>
     </Typography>
       
