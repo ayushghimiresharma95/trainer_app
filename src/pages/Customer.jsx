@@ -101,7 +101,7 @@ const Customer = () => {
       }
     })
       .then(response => {
-        
+        console.log(process.env.REACT_APP_URL)
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
