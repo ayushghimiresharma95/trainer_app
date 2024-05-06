@@ -28,8 +28,14 @@ function Navbar(props) {
   };
 
   const handleNavigation = (path) => {
-    navigate(`/${path}`);
-    handleDrawerToggle();
+    if (path == "customer"){
+      navigate("/customer")
+    }
+    else {
+      navigate(`/${path}`);
+      handleDrawerToggle();
+    }
+   
   };
   useEffect(() => {},[path])
 

@@ -14,7 +14,7 @@ function App() {
   return (
     <Typography variant='h6' color={'inherit'} component={"div"}>
       <Routes>
-        <Route path='/customer' element={<Customer/>} />
+        <Route path='/' element={<Customer/>} />
         <Route path='/profile' element={ <Profile/>} />
         <Route path="/training" element={<Trainings/>} />
         <Route path='/calender' element={<Calender />} />

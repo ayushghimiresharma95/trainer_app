@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ag-grid-community/core": "^31.3.1",
+    "@ag-grid-community/styles": "^31.3.1",
     "@aldabil/react-scheduler": "^2.9.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
