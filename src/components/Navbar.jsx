@@ -28,7 +28,9 @@ function Navbar(props) {
   };
 
   const handleNavigation = (path) => {
+    
     if (path == "customer"){
+     
       navigate("/")
     }
     else {
@@ -90,7 +92,7 @@ function Navbar(props) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }} >
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }} onClick={() => navigate(`/${item}`)}>
+              <Button key={item} sx={{ color: '#fff' }} onClick={() =>handleNavigation(item)}>
                 {item}
               </Button>
             ))}
