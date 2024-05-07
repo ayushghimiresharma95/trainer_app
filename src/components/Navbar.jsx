@@ -29,7 +29,7 @@ function Navbar(props) {
 
   const handleNavigation = (path) => {
     if (path == "customer"){
-      navigate("/customer")
+      navigate("/")
     }
     else {
       navigate(`/${path}`);

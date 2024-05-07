@@ -23,7 +23,7 @@ const Customer = () => {
   const dispatch = useDispatch()
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [filterCustomers, setFilterCustomers] = useState(null)
+  const [filterCustomers, setFilterCustomers] = useState(null) ;
   const navigate = useNavigate()
  
 
@@ -185,7 +185,7 @@ const Customer = () => {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
           <AddCustomers addCustomers={addcustomers}  >Add Customer</AddCustomers>
           {filterCustomers && <CSVLink style={{border:"1px solid #00215E",color:"#00215E",padding:"10px",textDecoration:"none",borderRadius:"3px"}} data={filterCustomers} headers={headers} variant="outlined" color="primary" >Export to CSV</CSVLink>}
-          <Button variant="outlined" onClick={() => navigate("/calender")}>Show in calender</Button>
+          
         </div>
         <AgGridReact
           rowData={customers}

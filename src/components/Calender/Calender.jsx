@@ -26,7 +26,7 @@ const localizer = dateFnsLocalizer({
 });
 const Calender = () => {
     const trainer = useSelector((state) => state.trainings);
-    const defaultDate = new Date(2024, 5, 9, 0, 0, 0);
+    const defaultDate = new Date()
     const dispatch = useDispatch()
 
     const events = () => {
