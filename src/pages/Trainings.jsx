@@ -10,6 +10,7 @@ import { Button, Snackbar } from '@mui/material';
 import AddTraining from '../components/AddTraining/AddTraining';
 import { CSVLink } from 'react-csv';
 import { useNavigate } from 'react-router';
+
 const Trainings = () => {
 
   const dispatch = useDispatch()
